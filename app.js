@@ -1,37 +1,18 @@
-// const http = require("http");
-
-const express = require("express");
-const bodyparser = require("body-parser");
-
+const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
 
-app.use(bodyparser.urlencoded({ extended: false }));
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
-// app.use('/', (req, res, next) => {
-//     console.log('This always runs');
-//     // res.send('<h1>Add Product page </h1>');
-//     // next();
-// })
+app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/add-product', (req, res, next) => {
-    // console.log('In the another middleware');
-    // res.send('<form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add Product</button></form>');
-    res.send('<form action="/product" method="POST"><input type="text" name="title"><input type="text" name="quantity"><button type="submit">Add Product</button></form>');
-})
+app.use('/admin', adminRoutes);
+app.use('/shop', shopRoutes);
 
-app.use('/product', (req, res, next) => {
-    console.log(req.body);
-    res.redirect('/');
-})
-
-
-app.use('/', (req, res, next) => {
-    // console.log('In the another middleware');
-    res.send('<h1>Hello from Express</h1>');
-})
-
-
-
+app.use((req, res, next) => {
+    res.status(404).send('<h1>Page not found</h1>');
+});
 
 app.listen(3000);
